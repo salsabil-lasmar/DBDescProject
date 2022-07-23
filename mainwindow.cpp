@@ -1,15 +1,21 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include"cdbedesclist.h"
-#include<QFile>
-#include<QTextStream>
-#include<QDebug>
+#include <QFile>
+#include <QTextStream>
+#include <QDebug>
+
+
+#include "cdbedesclist.h"
 #include<qstandarditemmodel.h>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    model = new QStandardItemModel(this); // you didn't initialize model, this caused the crash of the App.
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
     loadData();
 }
 
@@ -25,21 +31,27 @@ void MainWindow::loadData()
     model->setHorizontalHeaderItem(3, new QStandardItem("DBType"));
 
     ui->tableView->setModel(model);
-   /* CDbedescList obj;
-    obj.SetDbdescList();
+
+
+    CDbedescList obj;
+
+    QList<QList<QString>> m_dbList;
+    obj.SetDbdescList(m_dbList);
+
+    qDebug()<<m_dbList.size();
+
 
     QList<QStandardItem *> list_items;
-    for (int i=0;i<obj.SetDbdescList().size();i++){
+    for (int i=0;i<m_dbList.size();i++){
 
-        for (int j=0;j<obj.SetDbdescList()[i].size();j++){
-         list_items.append(new QStandardItem(obj.SetDbdescList()[i][0]));
-         list_items.append(new QStandardItem(obj.SetDbdescList()[i][1]));
-         list_items.append(new QStandardItem(obj.SetDbdescList()[i][2]));
-         list_items.append(new QStandardItem(obj.SetDbdescList()[i][3]));
-         model->appendRow(list_items);
-         list_items.clear();
-     }
-    }*/
+        list_items.append(new QStandardItem(m_dbList[i][0]));
+        list_items.append(new QStandardItem(m_dbList[i][1]));
+        list_items.append(new QStandardItem(m_dbList[i][2]));
+        list_items.append(new QStandardItem(m_dbList[i][3]));
+        model->appendRow(list_items);
+        list_items.clear();
+
+    }
 }
 MainWindow::~MainWindow()
 {

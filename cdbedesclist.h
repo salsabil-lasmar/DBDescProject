@@ -6,7 +6,10 @@ class CDbedescList
 {
 public:
     CDbedescList();
-    QList<QList<QString>> SetDbdescList();
+
+    void SetDbdescList(QList<QList<QString>> &m_dbList);
+
+
 };
 
 #endif // CDBEDESCLIST_H

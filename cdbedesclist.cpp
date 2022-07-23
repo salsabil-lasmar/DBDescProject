@@ -1,33 +1,38 @@
-#include "cdbedesclist.h"
 #include <QTextStream>
-#include<QFile>
+#include <QFile>
+#include <QCoreApplication>
+#include <QDebug>
+#include <QDir>
+
+
+
+#include "cdbedesclist.h"
 CDbedescList::CDbedescList()
 {
 
 }
-QList<QList<QString>> CDbedescList::SetDbdescList(){
 
-   QList<QString> list;
-   QList<QList<QString>> list1;
-   QString path ="C:\\Users\\salsabil.lasmar\\Desktop\\exemple.cpp";//"C:\\Projekte\\windekis_src\\GIT\\windekis\\Genix\\ApWare32\\WinDekis\\Source\\DbDescCommon.cpp";
-   QFile file(path);
-   if (file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
-         QTextStream flux(&file);
-         while (!flux.atEnd()) {
-             QString line = flux.readLine();
-             if(line.contains("{")){
-                 list =line.split(',').replaceInStrings(" ","");
-                 list.replaceInStrings("{","");
-                 list.replaceInStrings("}","");
-                 list1.append(list);
+void CDbedescList::SetDbdescList(QList<QList<QString> > &m_dbList)
+{
+    QList<QString> list;
 
-             }
+    QString path = QDir::currentPath()+"/input/exemple.cpp";
+    QFile file(path);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
+        QTextStream flux(&file);
+        while (!flux.atEnd()) {
+            QString line = flux.readLine();
 
-           }
+            if(line.contains("{")){
+                list =line.split(',').replaceInStrings(" ","");
+                list.replaceInStrings("{","");
+                list.replaceInStrings("}","");
+                m_dbList.append(list);
+            }
+        }
+    }
 
-
-   }
-return list1;
-
-
+    file.close();
 }
+
+
